@@ -1,0 +1,402 @@
+# =====================================
+# requirements.txt
+# =====================================
+streamlit==1.28.0
+pandas==2.1.0
+plotly==5.17.0
+mysql-connector-python==8.1.0
+requests==2.31.0
+GitPython==3.1.40
+numpy==1.25.2
+python-dotenv==1.0.0
+
+# =====================================
+# config.py - Configuration Management
+# =====================================
+"""
+Configuration file for PhonePe Pulse Project
+Store all configuration variables and settings
+"""
+
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Project Paths
+BASE_DIR = Path(__file__).parent
+DATA_DIR = BASE_DIR / "data"
+LOGS_DIR = BASE_DIR / "logs"
+CLONE_DIR = DATA_DIR / "phonepe_pulse_data"
+
+# Create directories if they don't exist
+DATA_DIR.mkdir(exist_ok=True)
+LOGS_DIR.mkdir(exist_ok=True)
+
+# Database Configuration
+DB_CONFIG = {
+    'host': os.getenv('DB_HOST', 'localhost'),
+    'database': os.getenv('DB_NAME', 'phonepe_pulse'),
+    'user': os.getenv('DB_USER', 'root'),
+    'password': os.getenv('DB_PASSWORD', 'your_password'),
+    'port': int(os.getenv('DB_PORT', 3306)),
+    'raise_on_warnings': True,
+    'autocommit': False
+}
+
+# GitHub Repository
+GITHUB_REPO_URL = "https://github.com/PhonePe/pulse.git"
+
+# ETL Configuration
+ETL_CONFIG = {
+    'batch_size': 1000,
+    'max_retries': 3,
+    'retry_delay': 5,  # seconds
+    'log_level': 'INFO'
+}
+
+# Streamlit Configuration
+STREAMLIT_CONFIG = {
+    'page_title': 'PhonePe Pulse',
+    'page_icon': '💳',
+    'layout': 'wide',
+    'initial_sidebar_state': 'expanded',
+    'cache_ttl': 600  # seconds
+}
+
+# Data Configuration
+DATA_CONFIG = {
+    'years': list(range(2018, 2025)),
+    'quarters': [1, 2, 3, 4],
+    'states': [
+        'Andaman & Nicobar', 'Andhra Pradesh', 'Arunachal Pradesh',
+        'Assam', 'Bihar', 'Chandigarh', 'Chhattisgarh',
+        'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Goa',
+        'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu & Kashmir',
+        'Jharkhand', 'Karnataka', 'Kerala', 'Ladakh', 'Lakshadweep',
+        'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya',
+        'Mizoram', 'Nagaland', 'Odisha', 'Puducherry', 'Punjab',
+        'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
+        'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
+    ],
+    'transaction_types': [
+        'Merchant Payments',
+        'Peer to Peer',
+        'Recharge & Bill Payments',
+        'Financial Services',
+        'Others'
+    ]
+}
+
+# Visualization Configuration
+VIZ_CONFIG = {
+    'color_scheme': {
+        'primary': '#5f259f',
+        'secondary': '#8e44ad',
+        'accent': '#a569bd',
+        'light': '#c4b5fd',
+        'very_light': '#d2b4de'
+    },
+    'chart_height': {
+        'small': 300,
+        'medium': 400,
+        'large': 500
+    }
+}
+
+# Logging Configuration
+LOGGING_CONFIG = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': LOGS_DIR / 'phonepe_pulse.log',
+            'formatter': 'standard',
+            'level': 'INFO',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+            'level': 'INFO',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True
+        }
+    }
+}
+
+# API Configuration (if needed for future expansion)
+API_CONFIG = {
+    'base_url': 'http://localhost:8000',
+    'version': 'v1',
+    'timeout': 30,
+    'max_retries': 3
+}
+
+# Security Configuration
+SECURITY_CONFIG = {
+    'enable_auth': False,  # Set to True in production
+    'session_timeout': 3600,  # seconds
+    'max_login_attempts': 3
+}
+
+# =====================================
+# .env.example - Environment Variables Template
+# =====================================
+"""
+# Database Configuration
+DB_HOST=localhost
+DB_NAME=phonepe_pulse
+DB_USER=root
+DB_PASSWORD=your_secure_password
+DB_PORT=3306
+
+# Application Configuration
+APP_ENV=development
+DEBUG=True
+SECRET_KEY=your-secret-key-here
+
+# GitHub Configuration
+GITHUB_TOKEN=your_github_token_if_needed
+
+# Logging
+LOG_LEVEL=INFO
+"""
+
+# =====================================
+# .gitignore
+# =====================================
+"""
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Data
+data/phonepe_pulse_data/
+*.csv
+*.json
+*.xlsx
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml
+
+# MySQL
+*.sql~
+"""
+
+# =====================================
+# utils.py - Utility Functions
+# =====================================
+"""
+Utility functions for PhonePe Pulse Project
+"""
+
+import pandas as pd
+import logging
+from datetime import datetime
+from typing import Union, Optional
+
+logger = logging.getLogger(__name__)
+
+def format_indian_currency(amount: float) -> str:
+    """Format amount in Indian currency style"""
+    if amount >= 10000000:  # Crores
+        return f"₹{amount/10000000:.2f} Cr"
+    elif amount >= 100000:  # Lakhs
+        return f"₹{amount/100000:.2f} L"
+    elif amount >= 1000:  # Thousands
+        return f"₹{amount/1000:.2f} K"
+    else:
+        return f"₹{amount:.2f}"
+
+def format_count(count: int) -> str:
+    """Format count in readable format"""
+    if count >= 10000000:
+        return f"{count/10000000:.2f} Cr"
+    elif count >= 100000:
+        return f"{count/100000:.2f} L"
+    elif count >= 1000:
+        return f"{count/1000:.2f}K"
+    else:
+        return str(count)
+
+def calculate_growth_rate(current: float, previous: float) -> float:
+    """Calculate growth rate percentage"""
+    if previous == 0:
+        return 0.0
+    return ((current - previous) / previous) * 100
+
+def clean_state_name(state_name: str) -> str:
+    """Clean and standardize state names"""
+    return state_name.replace("-", " ").title()
+
+def get_quarter_dates(year: int, quarter: int) -> tuple:
+    """Get start and end dates for a quarter"""
+    quarter_months = {
+        1: (1, 3),
+        2: (4, 6),
+        3: (7, 9),
+        4: (10, 12)
+    }
+    start_month, end_month = quarter_months[quarter]
+    start_date = datetime(year, start_month, 1)
+    
+    if end_month == 12:
+        end_date = datetime(year, 12, 31)
+    else:
+        end_date = datetime(year, end_month, 30)
+    
+    return start_date, end_date
+
+def validate_data_quality(df: pd.DataFrame, required_columns: list) -> bool:
+    """Validate DataFrame has required columns and no null values"""
+    try:
+        # Check required columns
+        missing_columns = set(required_columns) - set(df.columns)
+        if missing_columns:
+            logger.error(f"Missing columns: {missing_columns}")
+            return False
+        
+        # Check for null values
+        null_counts = df[required_columns].isnull().sum()
+        if null_counts.any():
+            logger.warning(f"Null values found: {null_counts[null_counts > 0]}")
+            return False
+        
+        # Check for negative values in amount columns
+        amount_columns = [col for col in df.columns if 'amount' in col.lower()]
+        for col in amount_columns:
+            if (df[col] < 0).any():
+                logger.error(f"Negative values found in {col}")
+                return False
+        
+        return True
+    
+    except Exception as e:
+        logger.error(f"Error validating data: {e}")
+        return False
+
+def aggregate_by_timeperiod(df: pd.DataFrame, 
+                           group_by: list, 
+                           agg_dict: dict) -> pd.DataFrame:
+    """Aggregate data by time period"""
+    try:
+        return df.groupby(group_by).agg(agg_dict).reset_index()
+    except Exception as e:
+        logger.error(f"Error aggregating data: {e}")
+        return pd.DataFrame()
+
+def export_to_csv(df: pd.DataFrame, filename: str, path: Optional[str] = None) -> bool:
+    """Export DataFrame to CSV"""
+    try:
+        if path is None:
+            path = DATA_DIR / "exports"
+            path.mkdir(exist_ok=True)
+        
+        filepath = path / f"{filename}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+        df.to_csv(filepath, index=False)
+        logger.info(f"Data exported to {filepath}")
+        return True
+    
+    except Exception as e:
+        logger.error(f"Error exporting to CSV: {e}")
+        return False
+
+def create_summary_stats(df: pd.DataFrame, metric_column: str) -> dict:
+    """Create summary statistics for a metric"""
+    return {
+        'mean': df[metric_column].mean(),
+        'median': df[metric_column].median(),
+        'std': df[metric_column].std(),
+        'min': df[metric_column].min(),
+        'max': df[metric_column].max(),
+        'total': df[metric_column].sum(),
+        'count': len(df)
+    }
+
+# =====================================
+# Run Script - run.py
+# =====================================
+"""
+Main runner script for PhonePe Pulse Project
+"""
+
+import sys
+import argparse
+from config import *
+from etl_script import PhonePeETL
+
+def main():
+    parser = argparse.ArgumentParser(description='PhonePe Pulse Project Runner')
+    parser.add_argument('--mode', choices=['etl', 'dashboard', 'both'], 
+                       default='both', help='Execution mode')
+    parser.add_argument('--force-reload', action='store_true', 
+                       help='Force reload data from GitHub')
+    
+    args = parser.parse_args()
+    
+    if args.mode in ['etl', 'both']:
+        print("Starting ETL Pipeline...")
+        etl = PhonePeETL(DB_CONFIG)
+        etl.run_etl_pipeline()
+        print("ETL Pipeline Completed!")
+    
+    if args.mode in ['dashboard', 'both']:
+        print("Starting Streamlit Dashboard...")
+        os.system("streamlit run streamlit_app.py")
+
+if __name__ == "__main__":
+    main()
